@@ -20,7 +20,7 @@ import { MdMailOutline } from 'react-icons/md';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import { signUp } from '@/lib/auth-client';
+import { authClient, signUp } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -54,6 +54,12 @@ const RegisterPage = () => {
       toast.error(error.message || 'Registration failed!');
     }
   };
+
+  const handleGoogleRegister = async() => {
+          await authClient.signIn.social({
+              provider: "google",
+          });
+      };
 
   return (
     <div className="min-h-screen bg-[#f8f9ff] dark:bg-[#0b1c30] px-4 py-10">
@@ -188,6 +194,7 @@ const RegisterPage = () => {
           </div>
 
           <Button
+            onClick={handleGoogleRegister}
             variant="bordered"
             className="w-full py-3 border border-[#c3c6d7] dark:border-[#737686] hover:bg-[#c3c6d7]/10 text-[#0b1c30] dark:text-white rounded-lg flex items-center justify-center gap-2.5 font-bold text-sm"
           >

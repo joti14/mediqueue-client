@@ -19,7 +19,7 @@ import { MdMailOutline } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
-import { signIn } from '@/lib/auth-client';
+import { authClient, signIn } from '@/lib/auth-client';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
@@ -49,6 +49,12 @@ const LoginPage = () => {
             console.log('registration error:', error);
             toast.error(error.message || 'Registration failed!');
         }
+    };
+
+    const handleGoogleLogin = async() => {
+        await authClient.signIn.social({
+            provider: "google",
+        });
     };
 
     return (
@@ -153,10 +159,11 @@ const LoginPage = () => {
                     </div>
 
                     <Button
+                        onClick={handleGoogleLogin}
                         variant="bordered"
                         className="w-full py-3 border border-[#c3c6d7] dark:border-[#737686] hover:bg-[#c3c6d7]/10 text-[#0b1c30] dark:text-white rounded-lg flex items-center justify-center gap-2.5 font-bold text-sm"
                     >
-                        <FcGoogle className="w-5 h-5 flex-shrink-0" />
+                        <FcGoogle className="w-5 h-5 shrink-0" />
                         Continue with Google
                     </Button>
 
