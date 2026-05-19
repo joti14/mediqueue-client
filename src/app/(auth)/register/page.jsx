@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import {
   Button,
@@ -19,14 +20,44 @@ import { MdMailOutline } from 'react-icons/md';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { FaArrowRightLong } from 'react-icons/fa6';
+import { signUp } from '@/lib/auth-client';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries());
+    console.log('user', user);
+
+    const { data, error } = await signUp.email({
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      image: user.image,
+      callbackURL: '/',
+    });
+
+    if (data) {
+      toast.success('Registration successful!');
+      router.push('/');
+      router.refresh();
+    }
+
+    if (error) {
+      console.log('registration error:', error);
+      toast.error(error.message || 'Registration failed!');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f9ff] dark:bg-[#0b1c30] px-4 py-10">
       <div className="max-w-[480px] mx-auto">
-        {/* Heading */}
         <div className="mb-6 text-center">
           <h2 className="text-3xl font-bold text-[#0b1c30] dark:text-white">
             Create Account
@@ -36,16 +67,19 @@ const RegisterPage = () => {
           </p>
         </div>
 
-        {/* Card */}
         <Card className="bg-white dark:bg-[#213145] border border-[#c3c6d7] dark:border-[#737686] rounded-xl p-[24px] md:p-[40px] shadow-sm w-full">
-          <Form className="flex w-full flex-col gap-5">
+          <Form onSubmit={handleRegister} className="flex w-full flex-col gap-5">
             <TextField isRequired name="name" type="text" className="w-full">
               <Label className="text-[12px] font-bold text-[#434655] dark:text-[#d3e4fe] uppercase tracking-wider">
                 Full Name
               </Label>
               <div className="relative">
                 <FaRegUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
-                <Input placeholder="Dr. Jane Smith" className="pl-10 w-full" />
+                <Input
+                  name="name"
+                  placeholder="Dr. Jane Smith"
+                  className="pl-10 w-full"
+                />
               </div>
               <FieldError />
             </TextField>
@@ -67,7 +101,11 @@ const RegisterPage = () => {
               </Label>
               <div className="relative">
                 <MdMailOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
-                <Input placeholder="jane.smith@university.edu" className="pl-10 w-full" />
+                <Input
+                  name="email"
+                  placeholder="jane.smith@university.edu"
+                  className="pl-10 w-full"
+                />
               </div>
               <FieldError />
             </TextField>
@@ -79,6 +117,7 @@ const RegisterPage = () => {
               <div className="relative">
                 <HiOutlinePhotograph className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
                 <Input
+                  name="image"
                   placeholder="https://image-placeholder.com/avatar.jpg"
                   className="pl-10 w-full"
                 />
@@ -88,7 +127,7 @@ const RegisterPage = () => {
 
             <TextField
               isRequired
-              minLength={8}
+              minLength={6}
               name="password"
               type={showPassword ? 'text' : 'password'}
               className="w-full"
@@ -110,7 +149,11 @@ const RegisterPage = () => {
               </Label>
               <div className="relative">
                 <RiLockPasswordLine className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
-                <Input placeholder="••••••••" className="pl-10 pr-12 w-full" />
+                <Input
+                  name="password"
+                  placeholder="••••••••"
+                  className="pl-10 pr-12 w-full"
+                />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -169,4 +212,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage
+export default RegisterPage;

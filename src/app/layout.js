@@ -2,6 +2,7 @@ import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { Toaster } from "react-hot-toast";
 
 // Load Inter font (used for body, labels and standard text)
 const inter = Inter({
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
         <main className="pt-20">
           {children}
         </main>
+        <Toaster />
         <Footer />
       </body>
     </html>
