@@ -2,25 +2,31 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ClipboardPlus } from "lucide-react";
+import { signOut, useSession } from "@/lib/auth-client";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
-  // Set to 'true' to view the Profile Avatar dropdown, 'false' for Login/Join Free
-  const [isLoggedIn, setIsLoggedIn] = useState(true); 
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+  // console.log(session)
+
   const pathname = usePathname();
 
-  // Track window scroll to add a premium backdrop blur effect
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Navigation Items
+  const handleLogOut = async () => {
+    await signOut();
+    router.push('/');
+  }
+
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Tutors", href: "/tutors" },
@@ -29,19 +35,16 @@ export default function Navbar() {
   ];
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 h-20 border-b transition-all duration-300 ${
-        scrolled 
-          ? "border-[#c3c6d7]/50 bg-[#f8f9ff]/85 backdrop-blur-md shadow-md dark:border-[#737686]/50 dark:bg-[#213145]/85" 
-          : "border-[#c3c6d7] bg-[#f8f9ff] shadow-sm dark:border-[#737686] dark:bg-[#213145] dark:shadow-none"
-      }`}
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 h-20 border-b transition-all duration-300 ${scrolled
+        ? "border-[#c3c6d7]/50 bg-[#f8f9ff]/85 backdrop-blur-md shadow-md dark:border-[#737686]/50 dark:bg-[#213145]/85"
+        : "border-[#c3c6d7] bg-[#f8f9ff] shadow-sm dark:border-[#737686] dark:bg-[#213145] dark:shadow-none"
+        }`}
     >
       <div className="mx-auto flex h-full w-full max-w-[1280px] items-center justify-between px-[16px] md:px-[40px]">
-        
-        {/* Brand Logo */}
+
         <Link href="/" className="flex items-center gap-[12px] group focus:outline-none">
           <span className="text-[#004ac6] transition-transform duration-300 group-hover:scale-105 dark:text-[#dbe1ff]">
-            {/* Inline SVG Medical Services Icon */}
             <svg
               className="w-8 h-8"
               xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +62,6 @@ export default function Navbar() {
           </h1>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-[24px]">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
@@ -67,11 +69,10 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`transition-all duration-200 pb-1 text-[16px] ${
-                  isActive
-                    ? "text-[#004ac6] dark:text-[#dbe1ff] font-bold border-b-2 border-[#004ac6] dark:border-[#dbe1ff]"
-                    : "text-[#434655] dark:text-[#d3e4fe] font-medium hover:text-[#004ac6] dark:hover:text-[#dbe1ff]"
-                }`}
+                className={`transition-all duration-200 pb-1 text-[16px] ${isActive
+                  ? "text-[#004ac6] dark:text-[#dbe1ff] font-bold border-b-2 border-[#004ac6] dark:border-[#dbe1ff]"
+                  : "text-[#434655] dark:text-[#d3e4fe] font-medium hover:text-[#004ac6] dark:hover:text-[#dbe1ff]"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -79,18 +80,15 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Desktop Access Actions / Profile section */}
         <div className="hidden md:flex items-center gap-[16px]">
-          {!isLoggedIn ? (
+          {!isPending && !session ? (
             <>
-              {/* Login Link */}
-              <Link 
-                href="/login" 
+              <Link
+                href="/login"
                 className="font-medium text-[#434655] hover:text-[#004ac6] dark:text-[#d3e4fe] dark:hover:text-[#dbe1ff] transition-colors"
               >
                 Login
               </Link>
-              {/* Join Free Button */}
               <Link href="/register">
                 <button className="bg-[#004ac6] text-white font-bold rounded-full px-6 py-2.5 shadow-lg shadow-[#004ac6]/10 hover:opacity-95 active:scale-95 transition-all duration-150">
                   Join Free
@@ -98,52 +96,47 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            /* Interactive Hover Profile Dropdown */
             <div className="relative group py-2">
               <button className="flex items-center gap-3 p-1.5 rounded-full hover:bg-[#d3e4fe]/25 dark:hover:bg-[#737686]/20 transition-all duration-200 border border-transparent">
-                <img
+                <Image
                   width={40}
                   height={40}
-                  src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=400"
-                  alt="Avatar"
+                  src={session?.user?.image || "/default-avatar.png"}
+                  alt={session?.user?.name || "User"}
                   className="w-10 h-10 rounded-full object-cover ring-2 ring-[#004ac6]/20 dark:ring-[#dbe1ff]/20"
                 />
                 <div className="text-left hidden lg:block">
                   <p className="text-sm font-bold text-[#0b1c30] dark:text-[#f8f9ff] truncate max-w-[100px]">
-                    Hasnahena Joti
+                    {session?.user?.name}
                   </p>
                   <p className="text-[10px] text-[#434655] dark:text-[#d3e4fe]">Student</p>
                 </div>
               </button>
 
-              {/* Hover Dropdown Menu */}
               <div className="absolute right-0 top-14 w-56 bg-[#f8f9ff] dark:bg-[#213145] border border-[#c3c6d7]/30 dark:border-[#737686]/30 rounded-2xl shadow-2xl hidden group-hover:flex flex-col py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-4 py-3 border-b border-[#c3c6d7]/20">
                   <p className="font-bold text-sm text-[#0b1c30] dark:text-[#f8f9ff]">Welcome back!</p>
-                  <p className="text-xs truncate text-[#434655] dark:text-[#d3e4fe]">sakib@gmail.com</p>
+                  <p className="text-xs truncate text-[#434655] dark:text-[#d3e4fe]">{session?.user?.email}</p>
                 </div>
-                
+
                 <Link href="/dashboard" className="px-4 py-2.5 text-sm text-[#434655] dark:text-[#d3e4fe] hover:bg-[#004ac6]/5 dark:hover:bg-[#004ac6]/10 hover:text-[#004ac6] dark:hover:text-[#dbe1ff] flex items-center gap-3 transition-colors">
-                  {/* Dashboard Icon */}
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 14a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                   </svg>
                   Dashboard
                 </Link>
-                
+
                 <Link href="/settings" className="px-4 py-2.5 text-sm text-[#434655] dark:text-[#d3e4fe] hover:bg-[#004ac6]/5 dark:hover:bg-[#004ac6]/10 hover:text-[#004ac6] dark:hover:text-[#dbe1ff] flex items-center gap-3 transition-colors">
-                  {/* User Icon */}
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   Settings
                 </Link>
 
-                <button 
-                  onClick={() => setIsLoggedIn(false)}
+                <button
+                  onClick={handleLogOut}
                   className="w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 flex items-center gap-3 transition-colors text-left"
                 >
-                  {/* Log Out Icon */}
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
@@ -191,9 +184,8 @@ export default function Navbar() {
 
       {/* Mobile Sliding Overlay Drawer */}
       <div
-        className={`fixed inset-x-0 top-20 bottom-0 z-40 bg-[#f8f9ff]/98 backdrop-blur-md dark:bg-[#213145]/98 md:hidden transition-all duration-300 ease-in-out border-t border-[#c3c6d7]/30 ${
-          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
+        className={`fixed inset-x-0 top-20 bottom-0 z-40 bg-[#f8f9ff]/98 backdrop-blur-md dark:bg-[#213145]/98 md:hidden transition-all duration-300 ease-in-out border-t border-[#c3c6d7]/30 ${isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
+          }`}
       >
         <div className="flex flex-col gap-6 p-6 h-full justify-between">
           <nav className="flex flex-col gap-4">
@@ -204,20 +196,19 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`text-lg py-2 transition-all duration-200 border-b border-[#c3c6d7]/10 ${
-                    isActive
-                      ? "text-[#004ac6] dark:text-[#dbe1ff] font-bold border-l-4 border-l-[#004ac6] dark:border-l-[#dbe1ff] pl-3"
-                      : "text-[#434655] dark:text-[#d3e4fe] font-medium pl-3 hover:text-[#004ac6] dark:hover:text-[#dbe1ff]"
-                  }`}
+                  className={`text-lg py-2 transition-all duration-200 border-b border-[#c3c6d7]/10 ${isActive
+                    ? "text-[#004ac6] dark:text-[#dbe1ff] font-bold border-l-4 border-l-[#004ac6] dark:border-l-[#dbe1ff] pl-3"
+                    : "text-[#434655] dark:text-[#d3e4fe] font-medium pl-3 hover:text-[#004ac6] dark:hover:text-[#dbe1ff]"
+                    }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
           </nav>
-          
+
           <div className="pt-4 border-t border-[#c3c6d7]/20">
-            {!isLoggedIn ? (
+            {!isPending && !session ? (
               <div className="grid grid-cols-2 gap-4">
                 <Link href="/login" onClick={() => setIsOpen(false)}>
                   <button className="w-full py-3.5 border border-[#004ac6]/30 text-[#004ac6] dark:border-[#dbe1ff]/30 dark:text-[#dbe1ff] font-bold rounded-xl text-center active:scale-95 transition-transform duration-100">
@@ -234,39 +225,36 @@ export default function Navbar() {
               <div className="flex flex-col gap-4">
                 {/* Mobile Logged In User Preview */}
                 <div className="flex items-center gap-4 px-3 py-2 rounded-xl bg-[#004ac6]/5">
-                  <img
+                  <Image
                     width={44}
                     height={44}
-                    src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=400"
-                    alt="Avatar"
+                    src={session?.user?.image || "/default-avatar.png"}
+                    alt={session?.user?.name || "User"}
                     className="w-11 h-11 rounded-full object-cover ring-2 ring-[#004ac6]/20"
                   />
                   <div>
-                    <p className="font-bold text-sm text-[#0b1c30] dark:text-[#f8f9ff]">Nazmus Sakib</p>
-                    <p className="text-xs text-[#434655] dark:text-[#d3e4fe]">sakib@gmail.com</p>
+                    <p className="font-bold text-sm text-[#0b1c30] dark:text-[#f8f9ff]">{session?.user?.name}</p>
+                    <p className="text-xs text-[#434655] dark:text-[#d3e4fe]">{session?.user?.email}</p>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Link 
-                    href="/dashboard" 
+                  <Link
+                    href="/dashboard"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-3 text-[#434655] dark:text-[#d3e4fe] rounded-xl hover:bg-[#004ac6]/5 font-medium transition-colors"
                   >
                     Dashboard
                   </Link>
-                  <Link 
-                    href="/settings" 
+                  <Link
+                    href="/settings"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-3 text-[#434655] dark:text-[#d3e4fe] rounded-xl hover:bg-[#004ac6]/5 font-medium transition-colors"
                   >
                     Settings
                   </Link>
-                  <button 
-                    onClick={() => {
-                      setIsLoggedIn(false);
-                      setIsOpen(false);
-                    }}
+                  <button
+                    onClick={handleLogOut}
                     className="flex items-center gap-3 w-full text-left px-3 py-3 text-red-500 rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 font-medium transition-colors"
                   >
                     Log Out
