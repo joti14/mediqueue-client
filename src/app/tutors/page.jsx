@@ -7,7 +7,6 @@ const TutorsPage = async () => {
     return (
         <div className="max-w-6xl mx-auto px-4 py-12">
             
-            {/* Header Title Section */}
             <div className="mb-10 text-center md:text-left max-w-3xl">
                 <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-slate-100 mb-3 tracking-tight">
                     Find Your Academic Mentor

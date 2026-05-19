@@ -41,7 +41,6 @@ const AvailableTutors = async () => {
         {tutors?.map((tutor) => {
           const {
             _id,
-            id,
             instructor,
             thumbnail,
             category,
@@ -52,7 +51,7 @@ const AvailableTutors = async () => {
 
           return (
             <div
-              key={_id || id}
+              key={_id}
               className="bg-white dark:bg-[#213145] border border-[#d9deea] dark:border-[#4b5b70] rounded-xl p-[16px] shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col"
             >
               <div className="flex-1">

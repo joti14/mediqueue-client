@@ -3,7 +3,7 @@ export const fetchTutors = async () => {
     cache: "no-store",
   });
   const tutors = await res.json();
-  return tutors;
+  return tutors || [];
 };
 
 export const fetchFeaturedTutors = async () => {
@@ -11,5 +11,5 @@ export const fetchFeaturedTutors = async () => {
     cache: "no-store",
   });
   const tutors = await res.json();
-  return tutors;
+  return tutors || [];
 };
