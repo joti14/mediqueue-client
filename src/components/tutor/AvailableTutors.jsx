@@ -39,14 +39,17 @@ const AvailableTutors = async () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[16px]">
         {tutors?.map((tutor) => {
-          const { _id, id } = tutor;
+          const {
+            _id,
+            instructor,
+            thumbnail,
+            category,
+            price,
+            rating,
+            location,
+          } = tutor;
 
-          const displayInstructor = tutor.instructor || tutor.fullName || "Qualified Tutor";
-          const displayThumbnail = tutor.thumbnail || tutor.photoUrl || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
-          const displayCategory = tutor.category || tutor.subject || "Medicine";
-          const displayPrice = tutor.price !== undefined ? tutor.price : (tutor.hourlyFee || 0);
-          const displayRating = tutor.rating || 5.0;
-          const displayLocation = tutor.location || "Remote";
+          const displayThumbnail = thumbnail || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
 
           return (
             <div
@@ -58,7 +61,7 @@ const AvailableTutors = async () => {
                   <div className="relative w-[52px] h-[52px] rounded-full overflow-hidden flex-shrink-0">
                     <Image
                       src={displayThumbnail}
-                      alt={displayInstructor}
+                      alt={instructor}
                       fill
                       className="object-cover"
                     />
@@ -67,7 +70,7 @@ const AvailableTutors = async () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
                       <h3 className="font-bold text-[16px] leading-[1.3] text-[#0b1c30] dark:text-[#f8f9ff] line-clamp-2 min-h-[42px]">
-                        {displayInstructor}
+                        {instructor}
                       </h3>
 
                       <div className="flex items-center gap-1 text-[#004ac6] dark:text-[#89f5e7] text-[13px] font-semibold shrink-0">
@@ -78,16 +81,16 @@ const AvailableTutors = async () => {
                         >
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
-                        <span>{displayRating?.toString().split(" ")[0]}</span>
+                        <span>{rating?.toString().split(" ")[0]}</span>
                       </div>
                     </div>
 
                     <p className="text-[13px] text-[#434655] dark:text-[#d3e4fe] mt-[2px] line-clamp-1 min-h-[20px]">
-                      {displayLocation}
+                      {location}
                     </p>
 
                     <div className="flex gap-[6px] mt-[10px] flex-wrap min-h-[28px]">
-                      {displayCategory?.split(" & ").map((item, index) => (
+                      {category?.split(" & ").map((item, index) => (
                         <span
                           key={index}
                           className="px-2 py-0.5 bg-[#e8f0ff] dark:bg-[#004ac6]/20 text-[#5a6475] dark:text-[#dbe1ff] rounded-full text-[11px] font-medium"
@@ -108,7 +111,7 @@ const AvailableTutors = async () => {
                     Hourly Fee
                   </p>
                   <p className="text-[26px] leading-none font-bold text-[#004ac6] dark:text-[#dbe1ff] mt-[4px]">
-                    ${displayPrice}.00
+                    ${price}.00
                   </p>
                 </div>
 

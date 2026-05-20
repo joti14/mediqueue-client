@@ -31,6 +31,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Tutors", href: "/tutors" },
     { label: "Add Tutors", href: "/add-tutors" },
+    { label: "My Tutors List", href: "/my-tutors" },
     { label: "My Booked Sessions", href: "/sessions" },
     { label: "Profile", href: "/profile" },
   ];

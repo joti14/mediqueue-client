@@ -26,7 +26,7 @@ const AddTutorsPage = () => {
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const res = await fetch(`${apiUrl}/tutors`, {
+      const res = await fetch(`${apiUrl}/my-tutors`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -36,7 +36,7 @@ const AddTutorsPage = () => {
 
       if (res.ok) {
         toast.success("Tutor registered successfully!");
-        router.push("/tutors");
+        router.push("/my-tutors");
       } else {
         toast.error("Failed to register tutor. Please try again.");
       }

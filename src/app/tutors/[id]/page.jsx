@@ -33,19 +33,23 @@ const TutorDetailsPage = async ({ params }) => {
     );
   }
 
-  const displayInstructor = tutor.instructor || tutor.fullName || "Qualified Professional";
-  const displayTitle = tutor.title || "Academic Medical Tutor";
-  const displayDescription = tutor.description || "No description provided yet.";
-  const displayThumbnail = tutor.thumbnail || tutor.photoUrl || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
-  const displayCategory = tutor.category || tutor.subject || "Medicine";
-  const displayPrice = tutor.price !== undefined ? tutor.price : (tutor.hourlyFee || 0);
-  const displayDuration = tutor.duration || "Flexible Duration";
-  const displayExperience = tutor.experience || "Experienced Practitioner";
-  const displayLocation = tutor.location || "Remote";
-  const displayMode = tutor.mode || tutor.teachingMode || "online";
-  const displayAvailable = tutor.available || tutor.availableDays || "To be arranged";
-  const displayRemainingSlots = tutor.remainingSlots !== undefined ? tutor.remainingSlots : (tutor.totalAvailableSlots || 5);
-  const displaySessionStartDate = tutor.sessionStartDate || "Flexible";
+  const {
+    title,
+    instructor,
+    description,
+    thumbnail,
+    category,
+    price,
+    duration,
+    experience,
+    location,
+    mode,
+    available,
+    remainingSlots,
+    sessionStartDate,
+  } = tutor;
+
+  const displayThumbnail = thumbnail || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
 
   return (
     <div className="max-w-5xl mx-auto px-[16px] md:px-[40px] py-[48px]">
@@ -56,7 +60,7 @@ const TutorDetailsPage = async ({ params }) => {
               <img
                 className="w-full h-full object-cover rounded-xl shadow-lg border border-[#c3c6d7]/30"
                 src={displayThumbnail}
-                alt={displayInstructor}
+                alt={instructor}
               />
               <div className="absolute -bottom-2 -right-2 bg-[#004ac6] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md">
                 <MdOutlineVerified className="text-sm" />
@@ -69,14 +73,14 @@ const TutorDetailsPage = async ({ params }) => {
               <div className="flex flex-col md:flex-row justify-between items-center md:items-start flex-wrap gap-4">
                 <div>
                   <h1 className="font-headline text-[32px] font-bold text-[#0b1c30] dark:text-[#f8f9ff] leading-none mb-1">
-                    {(displayInstructor || "Qualified Professional").split(" (")[0]}
+                    {(instructor || "Qualified Professional").split(" (")[0]}
                   </h1>
                   <p className="text-[#004ac6] dark:text-[#dbe1ff] font-semibold text-[16px] md:text-[18px]">
-                    {displayTitle}
+                    {title}
                   </p>
                   <p className="text-[#434655] dark:text-[#d3e4fe] flex items-center justify-center md:justify-start gap-1 mt-2 text-[14px]">
                     <IoLocationOutline className="text-base" />
-                    {displayLocation}
+                    {location}
                   </p>
                 </div>
 
@@ -84,7 +88,7 @@ const TutorDetailsPage = async ({ params }) => {
                 <div className="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
                   <div className="bg-[#dce9ff] dark:bg-[#004ac6]/20 px-5 py-2.5 rounded-lg border border-[#c3c6d7] dark:border-[#737686] text-center min-w-[140px]">
                     <div className="text-[#004ac6] dark:text-[#dbe1ff] font-bold text-[20px] font-headline">
-                      ${displayPrice}/hr
+                      ${price}/hr
                     </div>
                     <div className="text-[#434655] dark:text-[#d3e4fe] text-[12px] font-semibold uppercase tracking-wide">
                       Rate
@@ -103,22 +107,22 @@ const TutorDetailsPage = async ({ params }) => {
                   About Tutor
                 </h3>
                 <p className="text-[#434655] dark:text-[#d3e4fe] text-[15px] leading-relaxed">
-                  {displayDescription}
+                  {description}
                 </p>
               </div>
 
               <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-2">
                 <span className="bg-[#e5eeff] dark:bg-[#737686]/20 text-[#004ac6] dark:text-[#dbe1ff] px-4 py-1.5 rounded-full text-[13px] font-semibold border border-[#c3c6d7] dark:border-[#737686]">
-                  {displayCategory}
+                  {category}
                 </span>
                 <span className="bg-[#e5eeff] dark:bg-[#737686]/20 text-[#004ac6] dark:text-[#dbe1ff] px-4 py-1.5 rounded-full text-[13px] font-semibold border border-[#c3c6d7] dark:border-[#737686]">
-                  {displayExperience}
+                  {experience}
                 </span>
                 <span className="bg-[#e5eeff] dark:bg-[#737686]/20 text-[#004ac6] dark:text-[#dbe1ff] px-4 py-1.5 rounded-full text-[13px] font-semibold border border-[#c3c6d7] dark:border-[#737686]">
-                  {displayDuration} Course
+                  {duration} Course
                 </span>
                 <span className="bg-[#e5eeff] dark:bg-[#737686]/20 text-[#004ac6] dark:text-[#dbe1ff] px-4 py-1.5 rounded-full text-[13px] font-semibold border border-[#c3c6d7] dark:border-[#737686] uppercase">
-                  {displayMode} Class
+                  {mode} Class
                 </span>
               </div>
             </div>
@@ -128,7 +132,7 @@ const TutorDetailsPage = async ({ params }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
           <div className="bg-white dark:bg-[#213145] p-6 rounded-xl border border-[#c3c6d7] dark:border-[#737686] shadow-[0_2px_4px_rgba(15,23,42,0.05)]">
             <div className="flex items-center gap-3 mb-5 border-b border-[#c3c6d7]/30 dark:border-[#737686]/30 pb-3">
-              <FiBookOpen className="w-5 h-5 text-[#004ac6] dark:text-[#dbe1ff]"/>
+              <FiBookOpen className="w-5 h-5 text-[#004ac6] dark:text-[#dbe1ff]" />
               <h3 className="font-headline text-[18px] font-bold text-[#0b1c30] dark:text-[#f8f9ff]">
                 Experience
               </h3>
@@ -141,7 +145,7 @@ const TutorDetailsPage = async ({ params }) => {
                     Senior Academic Practitioner
                   </p>
                   <p className="text-[#434655] dark:text-[#d3e4fe] text-[13px]">
-                    MediQueue Academy • {displayExperience}
+                    MediQueue Academy • {experience}
                   </p>
                 </div>
               </li>
@@ -152,7 +156,7 @@ const TutorDetailsPage = async ({ params }) => {
                     Academic Residency Instructor
                   </p>
                   <p className="text-[#434655] dark:text-[#d3e4fe] text-[13px]">
-                    {displayLocation} Clinical Specialist
+                    {location} Clinical Specialist
                   </p>
                 </div>
               </li>
@@ -161,7 +165,7 @@ const TutorDetailsPage = async ({ params }) => {
 
           <div className="bg-white dark:bg-[#213145] p-6 rounded-xl border border-[#c3c6d7] dark:border-[#737686] shadow-[0_2px_4px_rgba(15,23,42,0.05)]">
             <div className="flex items-center gap-3 mb-5 border-b border-[#c3c6d7]/30 dark:border-[#737686]/30 pb-3">
-              <MdOutlineEventAvailable className="w-5 h-5 text-[#004ac6] dark:text-[#dbe1ff]"/>
+              <MdOutlineEventAvailable className="w-5 h-5 text-[#004ac6] dark:text-[#dbe1ff]" />
               <h3 className="font-headline text-[18px] font-bold text-[#0b1c30] dark:text-[#f8f9ff]">
                 Availability
               </h3>
@@ -172,7 +176,7 @@ const TutorDetailsPage = async ({ params }) => {
                   Weekly Hours
                 </span>
                 <span className="text-[#434655] dark:text-[#d3e4fe] text-[13px] font-bold">
-                  {displayAvailable}
+                  {available}
                 </span>
               </div>
               <div className="flex justify-between items-center py-2.5 border-b border-[#c3c6d7]/20">
@@ -180,7 +184,7 @@ const TutorDetailsPage = async ({ params }) => {
                   Next Session Starts
                 </span>
                 <span className="text-[#434655] dark:text-[#d3e4fe] text-[13px] font-bold">
-                  {displaySessionStartDate}
+                  {sessionStartDate}
                 </span>
               </div>
               <div className="flex justify-between items-center py-2.5 border-b border-[#c3c6d7]/20">
@@ -188,7 +192,7 @@ const TutorDetailsPage = async ({ params }) => {
                   Remaining Seats
                 </span>
                 <span className="text-[#006a61] dark:text-[#89f5e7] text-[13px] font-bold bg-[#006a61]/5 px-2 py-0.5 rounded">
-                  {displayRemainingSlots} left
+                  {remainingSlots} left
                 </span>
               </div>
 
