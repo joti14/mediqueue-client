@@ -30,6 +30,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Tutors", href: "/tutors" },
+    { label: "Add Tutors", href: "/add-tutors" },
     { label: "My Booked Sessions", href: "/sessions" },
     { label: "Profile", href: "/profile" },
   ];

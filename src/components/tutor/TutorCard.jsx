@@ -29,14 +29,15 @@ const TutorCard = ({ tutor }) => {
                 <div className="absolute top-3 right-3 z-10">
                     <Chip
                         size="sm"
-                        className="bg-gray-200/90 backdrop-blur-sm text-gray-800 font-semibold border-none"          >
+                        className="bg-gray-200/90 backdrop-blur-sm text-gray-800 font-semibold border-none"
+                    >
                         {category}
                     </Chip>
                 </div>
 
                 <Image
-                    src={thumbnail}
-                    alt={title}
+                    src={thumbnail || "/placeholder.png"}
+                    alt={title || "Tutor course"}
                     width={300}
                     height={300}
                     className="w-full h-[200px] object-cover rounded-t-xl transition-transform duration-700"
