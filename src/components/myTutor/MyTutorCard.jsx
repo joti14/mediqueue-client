@@ -7,6 +7,7 @@ import { FiClock, FiDollarSign, FiArrowRight } from "react-icons/fi";
 import { RiPencilLine } from "react-icons/ri";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { UpdateModal } from "./UpdateModal";
+import { DeleteTutor } from "./DeleteTutor";
 
 const MyTutorCard = ({ tutor }) => {
     if (!tutor) return null;
@@ -78,13 +79,7 @@ const MyTutorCard = ({ tutor }) => {
                     {/* Action buttons */}
                     <div className="flex items-center gap-2">
                         <UpdateModal tutor={tutor}/>
-                        <Button
-                            size="sm"
-                            className="flex gap-2 font-bold text-xs bg-red-500 text-white hover:bg-red-600 rounded-lg px-5 flex gap-1 items-center shadow-sm"
-                        >
-                            <FaRegTrashAlt />
-                            Delete Profile
-                        </Button>
+                        <DeleteTutor tutor={tutor}/>
 
                     </div>
                 </div>
