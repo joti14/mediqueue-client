@@ -6,6 +6,7 @@ import { MdOutlineVerified, MdOutlineEventAvailable } from "react-icons/md";
 import { FiClock, FiDollarSign, FiArrowRight } from "react-icons/fi";
 import { RiPencilLine } from "react-icons/ri";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { UpdateModal } from "./UpdateModal";
 
 const MyTutorCard = ({ tutor }) => {
     if (!tutor) return null;
@@ -21,15 +22,6 @@ const MyTutorCard = ({ tutor }) => {
         price
     } = tutor;
 
-    // Safe fallbacks for data compatibility
-    // const displayInstructor = instructor || tutor.fullName || "Qualified Tutor";
-    // const displayTitle = title || "Academic Tutoring Session";
-    // const displayThumbnail = thumbnail || tutor.photoUrl || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
-    // const displayCategory = category || tutor.subject || "Medicine";
-    // const displayAvailable = available || tutor.availableDays || "Flexible Schedule";
-    // const displaySessionStartDate = sessionStartDate || "Flexible Start";
-    // const displayPrice = tutor.price !== undefined ? tutor.price : (tutor.hourlyFee || 0);
-
     return (
         <div className="w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 mb-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
             {/* Image Container */}
@@ -41,14 +33,6 @@ const MyTutorCard = ({ tutor }) => {
                     sizes="(max-w-768px) 100vw, 176px"
                     className="object-cover transition-transform duration-500 hover:scale-105"
                 />
-                {/* <div className="absolute top-2.5 left-2.5">
-                    <Chip
-                        size="sm"
-                        className="bg-blue-600/90 text-white font-semibold text-[10px] uppercase tracking-wider px-2 border-none"
-                    >
-                        {displayCategory}
-                    </Chip>
-                </div> */}
             </div>
 
             {/* Content Details */}
@@ -93,25 +77,15 @@ const MyTutorCard = ({ tutor }) => {
 
                     {/* Action buttons */}
                     <div className="flex items-center gap-2">
-                        
-                            <Button
-                                size="sm"
-                                className="font-bold text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-4"
-                            >
-                                <RiPencilLine />
-                                Update Profile
-                            </Button>
-                        
-                        
-                            <Button
-                                size="sm"
-                                className="flex gap-2 font-bold text-xs bg-red-500 text-white hover:bg-red-600 rounded-lg px-5 flex gap-1 items-center shadow-sm"
-                            >
-                                <FaRegTrashAlt />
-                                Delete Profile
-                                
-                            </Button>
-                        
+                        <UpdateModal tutor={tutor}/>
+                        <Button
+                            size="sm"
+                            className="flex gap-2 font-bold text-xs bg-red-500 text-white hover:bg-red-600 rounded-lg px-5 flex gap-1 items-center shadow-sm"
+                        >
+                            <FaRegTrashAlt />
+                            Delete Profile
+                        </Button>
+
                     </div>
                 </div>
             </div>
