@@ -1,3 +1,4 @@
+import { BookSessionModal } from "@/components/tutors/BookSessionModal";
 import Link from "next/link";
 import { FiBookOpen } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
@@ -32,6 +33,7 @@ const TutorDetailsPage = async ({ params }) => {
       </div>
     );
   }
+
 
   const {
     title,
@@ -95,9 +97,7 @@ const TutorDetailsPage = async ({ params }) => {
                     </div>
                   </div>
 
-                  <button className="px-[24px] py-[12px] bg-[#004ac6] hover:bg-[#2563eb] text-white rounded-lg text-[14px] font-semibold active:scale-95 transition-all duration-150 shadow-md">
-                    Book Session
-                  </button>
+                  <BookSessionModal tutor={tutor} />
                 </div>
               </div>
 
