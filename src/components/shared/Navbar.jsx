@@ -3,15 +3,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ClipboardPlus } from "lucide-react";
+import { ClipboardPlus, Sun, Moon } from "lucide-react";
 import { signOut, useSession } from "@/lib/auth-client";
 import Image from "next/image";
+import { useTheme } from "@/app/providers";
+import { Switch } from "@heroui/react";
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
   const { data: session, isPending } = useSession();
+  const { theme, toggleTheme } = useTheme();
   // console.log(session)
 
   const pathname = usePathname();
@@ -57,7 +61,6 @@ export default function Navbar() {
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-10-2h4v2h-4V4zm10 15H4V8h16v11zm-9-2h2v-3h3v-2h-3V9H11v3H8v2h3v3z" />
             </svg>
-            {/* <ClipboardPlus /> */}
           </span>
           <h1 className="font-headline text-2xl font-bold text-[#004ac6] transition-colors duration-300 dark:text-[#dbe1ff]">
             MediQueue
@@ -82,7 +85,25 @@ export default function Navbar() {
           })}
         </nav>
 
-        <div className="hidden md:flex items-center gap-[16px]">
+        <div className="hidden md:flex items-center gap-[20px]">
+          <button
+            onClick={toggleTheme}
+            className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-[#434655] dark:text-[#d3e4fe] transition-all duration-300 border border-slate-200 dark:border-white/10 active:scale-95 cursor-pointer relative overflow-hidden flex items-center justify-center w-10 h-10"
+            aria-label="Toggle Theme"
+          >
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              <Sun className={`absolute w-5 h-5 text-amber-500 transition-all duration-500 ${
+                theme === "dark" 
+                  ? "rotate-0 scale-100 opacity-100" 
+                  : "-rotate-90 scale-0 opacity-0"
+              }`} />
+              <Moon className={`absolute w-5 h-5 text-[#004ac6] dark:text-sky-300 transition-all duration-500 ${
+                theme === "dark" 
+                  ? "rotate-90 scale-0 opacity-0" 
+                  : "rotate-0 scale-100 opacity-100"
+              }`} />
+            </div>
+          </button>
           {!isPending && !session ? (
             <>
               <Link
@@ -157,7 +178,6 @@ export default function Navbar() {
           aria-label="Toggle navigation menu"
         >
           {isOpen ? (
-            /* Close SVG Icon */
             <svg
               className="w-6 h-6 transform transition-transform duration-300 rotate-90"
               xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +189,6 @@ export default function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
-            /* Hamburger Icon */
             <svg
               className="w-6 h-6 transform transition-transform duration-300"
               xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +203,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Sliding Overlay Drawer */}
       <div
         className={`fixed inset-x-0 top-20 bottom-0 z-40 bg-[#f8f9ff]/98 backdrop-blur-md dark:bg-[#213145]/98 md:hidden transition-all duration-300 ease-in-out border-t border-[#c3c6d7]/30 ${isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
           }`}
@@ -209,7 +227,19 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="pt-4 border-t border-[#c3c6d7]/20">
+          <div className="pt-4 border-t border-[#c3c6d7]/20 flex flex-col gap-4">
+            <button 
+              onClick={toggleTheme}
+              className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 text-left transition-colors active:scale-[0.98] cursor-pointer animate-in fade-in duration-200"
+            >
+              <span className="text-sm font-semibold text-[#434655] dark:text-[#d3e4fe] flex items-center gap-2">
+                {theme === "dark" ? <Sun className="w-4.5 h-4.5 text-amber-500 animate-in spin-in-12 duration-500" /> : <Moon className="w-4.5 h-4.5 text-[#004ac6] dark:text-sky-300 animate-in spin-in-12 duration-500" />}
+                {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              </span>
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-medium bg-slate-200/50 dark:bg-white/10 px-2.5 py-1 rounded-full">
+                Tap to switch
+              </div>
+            </button>
             {!isPending && !session ? (
               <div className="grid grid-cols-2 gap-4">
                 <Link href="/login" onClick={() => setIsOpen(false)}>
@@ -225,7 +255,6 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {/* Mobile Logged In User Preview */}
                 <div className="flex items-center gap-4 px-3 py-2 rounded-xl bg-[#004ac6]/5">
                   <Image
                     width={44}

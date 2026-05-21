@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@heroui/styles"; 
 
+@variant dark (&:where(.dark, .dark *));
+
 
 body {
   font-family: var(--font-inter), sans-serif;
@@ -9,3 +11,20 @@ body {
 .font-headline {
   font-family: var(--font-montserrat), sans-serif;
 }
+
+/* Swiper Custom Pagination Styling */
+.custom-swiper-pagination .swiper-pagination-bullet {
+  width: 16px;
+  height: 6px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active {
+  width: 36px;
+  background-color: #89f5e7;
+}
+
