@@ -14,22 +14,33 @@ const MyTutorCard = ({ tutor }) => {
 
     const {
         _id,
-        title,
-        thumbnail,
-        category,
-        available,
-        instructor,
-        sessionStartDate,
-        price
+        title = "",
+        thumbnail = "",
+        category = "",
+        available = "",
+        instructor = "",
+        sessionStartDate = "",
+        price = "",
+        studentName = "",
+        email = "",
+        phone = "",
+        status = "confirmed",
     } = tutor;
+
+    const displayThumbnail = thumbnail?.trim()
+        ? thumbnail
+        : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop";
+
+    const displayTitle = title || instructor || "Booked Session";
+    const displayInstructor = instructor || "Unknown Tutor";
 
     return (
         <div className="w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 mb-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
             {/* Image Container */}
             <div className="relative w-full md:w-44 h-44 md:h-44 rounded-xl overflow-hidden flex-shrink-0 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800">
                 <Image
-                    src={thumbnail}
-                    alt={title}
+                    src={displayThumbnail}
+                    alt={displayTitle}
                     fill
                     sizes="(max-w-768px) 100vw, 176px"
                     className="object-cover transition-transform duration-500 hover:scale-105"
@@ -41,15 +52,17 @@ const MyTutorCard = ({ tutor }) => {
                 <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
                         <h2 className="font-extrabold text-xl text-slate-900 dark:text-slate-100 leading-tight">
-                            {instructor}
+                            {displayInstructor}
                         </h2>
                         <span className="bg-[#004ac6]/10 text-[#004ac6] dark:bg-blue-500/10 dark:text-blue-400 p-0.5 rounded-full flex items-center justify-center shrink-0">
                             <MdOutlineVerified className="text-sm" />
                         </span>
                     </div>
-                    <p className="text-[#004ac6] dark:text-[#dbe1ff] font-semibold text-sm">
-                        {title}
-                    </p>
+                    {displayTitle !== displayInstructor && (
+                        <p className="text-[#004ac6] dark:text-[#dbe1ff] font-semibold text-sm">
+                            {displayTitle}
+                        </p>
+                    )}
                 </div>
 
                 {/* Session Attributes */}
@@ -66,15 +79,19 @@ const MyTutorCard = ({ tutor }) => {
 
                 <div className="border-t border-slate-100 dark:border-slate-800/80 pt-3 flex flex-wrap items-center justify-between gap-4">
                     {/* Hourly Fee */}
-                    <div className="flex items-baseline gap-1">
-                        <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">
-                            Hourly Fee:
-                        </span>
-                        <span className="text-2xl font-black text-[#004ac6] dark:text-[#dbe1ff] flex items-center">
-                            <FiDollarSign className="text-base -mr-0.5" />
-                            {price}
-                        </span>
-                    </div>
+                    {price ? (
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">
+                                Hourly Fee:
+                            </span>
+                            <span className="text-2xl font-black text-[#004ac6] dark:text-[#dbe1ff] flex items-center">
+                                <FiDollarSign className="text-base -mr-0.5" />
+                                {price}
+                            </span>
+                        </div>
+                    ) : (
+                        <span className="text-xs text-slate-400 font-medium">No price info</span>
+                    )}
 
                     {/* Action buttons */}
                     <div className="flex items-center gap-2">
