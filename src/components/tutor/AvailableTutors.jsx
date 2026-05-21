@@ -89,7 +89,7 @@ const AvailableTutors = async () => {
                       {location}
                     </p>
 
-                    <div className="flex gap-[6px] mt-[10px] flex-wrap min-h-[28px]">
+                    <div className="flex items-center gap-[6px] mt-[10px] flex-wrap min-h-[28px]">
                       {category?.split(" & ").map((item, index) => (
                         <span
                           key={index}
