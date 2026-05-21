@@ -15,10 +15,9 @@ const TutorCard = ({ tutor }) => {
         thumbnail,
         category,
         price,
-        duration,
         instructor,
-        experience,
-        location,
+        available,
+        sessionStartDate,
         mode,
         rating,
     } = tutor;
@@ -31,7 +30,8 @@ const TutorCard = ({ tutor }) => {
                 <div className="absolute top-3 right-3 z-10">
                     <Chip
                         size="sm"
-                        className="bg-gray-200/90 backdrop-blur-sm text-gray-800 font-semibold border-none"          >
+                        className="bg-gray-200/90 backdrop-blur-sm text-gray-800 font-semibold border-none"
+                    >
                         {category}
                     </Chip>
                 </div>
@@ -54,19 +54,21 @@ const TutorCard = ({ tutor }) => {
                 </h3>
             </CardHeader>
 
-            <div className="px-4 pt-0 pb-3">
-                <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm text-slate-600 dark:text-slate-300">
-                    <p>
-                        <span className="font-semibold">Exp:</span> {experience}
+            <div className="px-4 pt-0 pb-3 text-[12px] text-slate-600 dark:text-slate-300">
+                <div className="space-y-1 mb-3">
+                    <p className="wrap-break-word text-sm">
+                        <span className="font-semibold">Available:</span> {available || 'N/A'}
                     </p>
-                    <p>
-                        <span className="font-semibold">Location:</span> {location}
+                    <p className="wrap-break-word text-sm">
+                        <span className="font-semibold">Starts:</span> {sessionStartDate || 'TBD'}
                     </p>
-                    <p>
-                        <span className="font-semibold">Mode:</span> {mode}
+                </div>
+                <div className="grid grid-cols-2 gap-y-2 gap-x-3 text-[11px]">
+                    <p className="wrap-break-word">
+                        <span className="font-semibold">Mode:</span> {mode || 'N/A'}
                     </p>
-                    <p>
-                        <span className="font-semibold">Rating:</span> {rating}
+                    <p className="wrap-break-word">
+                        <span className="font-semibold">Rating:</span> {rating || 'N/A'}
                     </p>
                 </div>
             </div>
@@ -74,7 +76,7 @@ const TutorCard = ({ tutor }) => {
             <CardFooter className="flex justify-between items-center px-4 py-3 border-t border-slate-100 dark:border-slate-800">
                 <div>
                     <p className="text-[10px] text-slate-400 uppercase font-semibold">
-                        Duration: {duration}
+                        Hourly Fee
                     </p>
                     <p className="text-xl font-extrabold text-[#004ac6] dark:text-[#dbe1ff]">
                         ${price}
