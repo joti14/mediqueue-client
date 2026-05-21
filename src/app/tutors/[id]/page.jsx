@@ -1,22 +1,25 @@
 import { BookSessionModal } from "@/components/tutors/BookSessionModal";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { FiBookOpen } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineEventAvailable, MdOutlineVerified } from "react-icons/md";
 import { PiInfoBold } from "react-icons/pi";
 
-const fetchSingleTutor = async (id) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tutors/${id}`, {
-    cache: "no-store",
-  });
-
-  const data = await res.json();
-  return data || {};
-};
-
 const TutorDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const tutor = await fetchSingleTutor(id);
+  const {token}  = await auth.api.getToken({
+    headers: await headers()
+  })
+  
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tutors/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+
+  const tutor = await res.json();
 
   if (!tutor || Object.keys(tutor).length === 0) {
     return (

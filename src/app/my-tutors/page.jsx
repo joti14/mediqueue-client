@@ -3,13 +3,21 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@heroui/react';
 import { FiCalendar, FiSearch } from 'react-icons/fi';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 const MyTutorListPage = async () => {
     let tutors = [];
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
     try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
         const res = await fetch(`${apiUrl}/my-tutors`, {
             cache: "no-store",
+            headers: {
+                authorization: `Bearer ${token}`
+            }
         });
         if (res.ok) {
             tutors = await res.json();
@@ -45,19 +53,19 @@ const MyTutorListPage = async () => {
                     <div className="mx-auto w-20 h-20 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-6">
                         <FiCalendar className="text-3xl" />
                     </div>
-                    
+
                     <h2 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 mb-3">
                         No Booked Tutors Yet
                     </h2>
-                    
+
                     <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8 max-w-md mx-auto">
                         It looks like you haven't booked any academic sessions yet. Connect with our expert medical tutors to accelerate your gross anatomy, biochemistry, pathology, or USMLE board preparation!
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Link href="/tutors">
-                            <Button 
-                                size="lg" 
+                            <Button
+                                size="lg"
                                 className="bg-[#004ac6] text-white hover:bg-[#2563eb] font-bold text-sm rounded-xl px-8 shadow-md flex items-center gap-2"
                             >
                                 <FiSearch className="text-base" />

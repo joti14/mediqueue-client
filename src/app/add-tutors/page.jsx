@@ -13,6 +13,7 @@ import {
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 const AddTutorsPage = () => {
   const router = useRouter();
@@ -24,12 +25,16 @@ const AddTutorsPage = () => {
     const tutor = Object.fromEntries(formData.entries());
     console.log(tutor);
 
+    const {data:tokenData} = await authClient.token();
+    console.log(tokenData);
+    
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       const res = await fetch(`${apiUrl}/my-tutors`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`
         },
         body: JSON.stringify(tutor),
       });
@@ -42,7 +47,7 @@ const AddTutorsPage = () => {
       }
     } catch (error) {
       console.error("Error registering tutor:", error);
-      toast.error("An error occurred. Please check if the server is running.");
+      toast.error("An error occurred");
     }
   };
 

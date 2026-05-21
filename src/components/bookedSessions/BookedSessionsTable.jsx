@@ -5,6 +5,7 @@ import { Button, Chip } from "@heroui/react";
 import { MdOutlineVerified } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function BookedSessionsTable({ bookings }) {
     const router = useRouter();
@@ -16,11 +17,16 @@ export default function BookedSessionsTable({ bookings }) {
         if (!confirm("Are you sure you want to cancel this booking?")) {
             return;
         }
+
+        const {data:tokenData} = await authClient.token();
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
             const res = await fetch(`${apiUrl}/my-tutors/${id}`, {
                 method: "PATCH",
-                headers: { "content-type": "application/json" },
+                headers: { 
+                    "content-type": "application/json",
+                    authoriztion: `Bearer ${tokenData?.token}`
+                },
                 body: JSON.stringify({ status: "cancelled" }),
             });
 

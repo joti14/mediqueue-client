@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Envelope } from "@gravity-ui/icons";
 import { Button, Input, Label, Modal, Surface, TextField, Select, FieldError, ListBox } from "@heroui/react";
 import { useRouter } from "next/navigation";
@@ -32,12 +33,15 @@ export function UpdateModal({ tutor }) {
 
         setIsOpen(false);
 
+        const {data:tokenData} = await authClient.token();
+
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
             const res = await fetch(`${apiUrl}/my-tutors/${_id}`, {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
+                    authorization: `Bearer ${tokenData?.token}`
                 },
                 body: JSON.stringify(updatedTutor),
             });

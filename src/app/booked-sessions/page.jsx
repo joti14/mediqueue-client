@@ -2,12 +2,20 @@ import Link from 'next/link';
 import { Button } from '@heroui/react';
 import { FiCalendar, FiSearch } from 'react-icons/fi';
 import BookedSessionsTable from '@/components/bookedSessions/BookedSessionsTable';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 const MyBookedSessions = async () => {
     let bookings = [];
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
     try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
         const res = await fetch(`${apiUrl}/my-tutors`, {
             cache: "no-store",
+            headers: {
+                authorization: `Bearer ${token}`
+            }
         });
         if (res.ok) {
             bookings = await res.json();
@@ -29,7 +37,7 @@ const MyBookedSessions = async () => {
                 </p>
             </div>
             {hasBookings ? (
-            <BookedSessionsTable bookings={bookings} />
+                <BookedSessionsTable bookings={bookings} />
             ) : (
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 md:p-16 text-center max-w-2xl mx-auto">
                     <div className="mx-auto w-20 h-20 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mb-6">

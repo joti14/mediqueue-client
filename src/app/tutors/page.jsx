@@ -1,5 +1,6 @@
 import TutorCard from "@/components/tutor/TutorCard";
 import { fetchTutors } from "@/lib/tutors/data";
+// import TutorFilterBar from "@/components/tutors/TutorFilterBar";
 
 const TutorsPage = async () => {
     const tutors = await fetchTutors();
@@ -16,6 +17,8 @@ const TutorsPage = async () => {
                     find the right tutor to accelerate your learning.
                 </p>
             </div>
+
+            {/* <TutorFilterBar /> */}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tutors?.map((tutor) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { AlertDialog, Button } from "@heroui/react";
 import { redirect, useRouter } from "next/navigation";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -9,11 +10,15 @@ export function DeleteTutor({ tutor }) {
     const { _id, instructor } = tutor;
 
     const handleDelete = async () => {
+
+        const {data:tokenData} = await authClient.token();
+
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
         const res = await fetch(`${apiUrl}/my-tutors/${_id}`, {
             method: 'DELETE',
             headers: {
                 "content-type": "application/json",
+                authorization: `Bearer ${tokenData?.token}`
             },
         });
         const data = await res.json();
