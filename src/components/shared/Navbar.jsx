@@ -28,16 +28,20 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     await signOut();
+    setIsOpen(false);
     router.push('/');
+    router.refresh();
   }
 
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Tutors", href: "/tutors" },
-    { label: "Add Tutors", href: "/add-tutors" },
-    { label: "My Tutors List", href: "/my-tutors" },
-    { label: "My Booked Sessions", href: "/booked-sessions" },
-    { label: "Profile", href: "/profile" },
+    ...(session ? [
+      { label: "Add Tutors", href: "/add-tutors" },
+      { label: "My Tutors List", href: "/my-tutors" },
+      { label: "My Booked Sessions", href: "/booked-sessions" },
+      { label: "Profile", href: "/profile" },
+    ] : []),
   ];
 
   return (

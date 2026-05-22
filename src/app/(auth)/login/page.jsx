@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Button,
     Card,
@@ -26,6 +26,10 @@ const LoginPage = () => {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
 
+    useEffect(() => {
+        document.title = "Login | MediQueue";
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -40,7 +44,7 @@ const LoginPage = () => {
         });
 
         if (data) {
-            toast.success('Registration successful!');
+            toast.success('Login successful!');
             router.push('/');
             router.refresh();
         }
@@ -51,7 +55,7 @@ const LoginPage = () => {
         }
     };
 
-    const handleGoogleLogin = async() => {
+    const handleGoogleLogin = async () => {
         await authClient.signIn.social({
             provider: "google",
         });
@@ -110,15 +114,27 @@ const LoginPage = () => {
                                 if (!/[A-Z]/.test(value)) {
                                     return 'Password must contain at least one uppercase letter';
                                 }
+                                if (!/[a-z]/.test(value)) {
+                                    return 'Password must contain at least one lowercase letter';
+                                }
                                 if (!/[0-9]/.test(value)) {
                                     return 'Password must contain at least one number';
                                 }
                                 return null;
                             }}
                         >
-                            <Label className="text-[12px] font-bold text-[#434655] dark:text-[#d3e4fe] uppercase tracking-wider">
-                                Secure Password
-                            </Label>
+                            <div className="flex justify-between items-center mb-1">
+                                <Label className="text-[12px] font-bold text-[#434655] dark:text-[#d3e4fe] uppercase tracking-wider">
+                                    Secure Password
+                                </Label>
+                                <button
+                                    type="button"
+                                    onClick={() => toast("Reset link sent to your academic email!", { icon: "📧" })}
+                                    className="text-xs font-bold text-[#004ac6] dark:text-[#93b4ff] hover:underline"
+                                >
+                                    Forgot Password?
+                                </button>
+                            </div>
                             <div className="relative">
                                 <RiLockPasswordLine className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
                                 <Input
@@ -134,12 +150,12 @@ const LoginPage = () => {
                                 </button>
                             </div>
                             <Description className="text-slate-400 text-[11px] mt-1.5 leading-tight">
-                                Must be 6+ characters with at least 1 uppercase and 1 number.
+                                Must be 6+ characters with at least 1 uppercase, 1 lowercase and 1 number.
                             </Description>
                             <FieldError />
                         </TextField>
 
-                        <div className="flex justify-center mt-2">
+                        <div className="flex justify-center">
                             <Button
                                 className="w-full py-4 bg-[#004ac6] text-white hover:bg-[#2563eb] font-bold rounded-lg shadow-md transition-all flex items-center justify-center gap-2"
                                 type="submit"
@@ -174,7 +190,7 @@ const LoginPage = () => {
                                 href="/register"
                                 className="text-[#004ac6] dark:text-[#dbe1ff] font-bold hover:underline"
                             >
-                                Create An Acoount
+                                Create An Account
                             </Link>
                         </p>
                     </div>

@@ -4,6 +4,7 @@ import { authClient, signOut } from '@/lib/auth-client';
 import { Avatar, Card, Button } from '@heroui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { FiMail, FiUser, FiCalendar, FiShield, FiLogOut, FiExternalLink, FiCheck } from 'react-icons/fi';
 import UpdateProfileModal from '@/components/profile/UpdateProfileModal';
 

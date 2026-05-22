@@ -15,15 +15,19 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+export const metadata = {
+  title: "MediQueue - Connect with Expert Medical Tutors",
+  description:
+    "Access expert medical tutoring for USMLE, anatomy, clinical preparation and more. Book sessions with verified professionals.",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="antialiased">
         <Providers>
           <Navbar />
-          <main className="pt-20">
-            {children}
-          </main>
+          <main className="pt-20">{children}</main>
           <Toaster />
           <Footer />
         </Providers>
@@ -31,4 +35,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-

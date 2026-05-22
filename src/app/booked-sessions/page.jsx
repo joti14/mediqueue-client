@@ -4,6 +4,12 @@ import { FiCalendar, FiSearch } from 'react-icons/fi';
 import BookedSessionsTable from '@/components/bookedSessions/BookedSessionsTable';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+
+export const metadata = {
+  title: "Booked Sessions | MediQueue",
+  description: "View and manage all your booked tutoring sessions. Track upcoming appointments and session details.",
+};
+
 const MyBookedSessions = async () => {
     let bookings = [];
     const { token } = await auth.api.getToken({

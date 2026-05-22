@@ -115,7 +115,7 @@ const AvailableTutors = async () => {
                   </p>
                 </div>
 
-                <Link href={`/tutors/${_id || id}`}>
+                <Link href={`/tutors/${_id}`}>
                   <button className="px-[20px] py-[10px] bg-[#004ac6] hover:bg-[#2563eb] text-white rounded-lg text-[14px] font-semibold transition-all duration-150 whitespace-nowrap">
                     Book Session
                   </button>

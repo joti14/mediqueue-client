@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -28,6 +28,10 @@ const RegisterPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
+  useEffect(() => {
+    document.title = "Register | MediQueue";
+  }, []);
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -45,7 +49,7 @@ const RegisterPage = () => {
 
     if (data) {
       toast.success('Registration successful!');
-      router.push('/');
+      router.push('/login');
       router.refresh();
     }
 
@@ -144,6 +148,9 @@ const RegisterPage = () => {
                 if (!/[A-Z]/.test(value)) {
                   return 'Password must contain at least one uppercase letter';
                 }
+                if (!/[a-z]/.test(value)) {
+                  return 'Password must contain at least one lowercase letter';
+                }
                 if (!/[0-9]/.test(value)) {
                   return 'Password must contain at least one number';
                 }
@@ -169,7 +176,7 @@ const RegisterPage = () => {
                 </button>
               </div>
               <Description className="text-slate-400 text-[11px] mt-1.5 leading-tight">
-                Must be 6+ characters with at least 1 uppercase and 1 number.
+                Must be 6+ characters with at least 1 uppercase, 1 lowercase and 1 number.
               </Description>
               <FieldError />
             </TextField>

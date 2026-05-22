@@ -54,7 +54,7 @@ export function BookSessionModal({ tutor }) {
     };
 
     return (
-        <Modal open={isOpen} onOpenChange={setIsOpen}>
+        <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
             <Button
                 onClick={() => isSlotAvailable && setIsOpen(true)}
                 disabled={!isSlotAvailable}

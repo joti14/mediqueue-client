@@ -4,6 +4,11 @@ import TutorSearchBar from "@/components/tutors/TutorSearchBar";
 import TutorDateFilter from "@/components/tutors/TutorDateFilter";
 import { fetchTutors } from "@/lib/tutors/data";
 
+export const metadata = {
+  title: "Find Your Academic Mentor | MediQueue",
+  description: "Browse and filter expert medical tutors by availability, experience, and specialization. Schedule sessions today.",
+};
+
 const TutorsPage = async ({ searchParams }) => {
     const resolvedSearchParams = await searchParams;
     const tutors = await fetchTutors(resolvedSearchParams);

@@ -2,6 +2,7 @@ import { BookSessionModal } from "@/components/tutors/BookSessionModal";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FiBookOpen } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineEventAvailable, MdOutlineVerified } from "react-icons/md";
@@ -9,17 +10,34 @@ import { PiInfoBold } from "react-icons/pi";
 
 const TutorDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const {token}  = await auth.api.getToken({
+
+  const session = await auth.api.getSession({
     headers: await headers()
-  })
-  
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tutors/${id}`, {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
   });
 
-  const tutor = await res.json();
+  if (!session) {
+    redirect('/login');
+  }
+
+  const { token } = await auth.api.getToken({
+    headers: await headers()
+  });
+
+  let tutor = null;
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tutors/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+
+    if (res.ok) {
+      tutor = await res.json();
+    }
+  } catch (error) {
+    console.error("Error fetching tutor details:", error);
+  }
 
   if (!tutor || Object.keys(tutor).length === 0) {
     return (

@@ -1,16 +1,32 @@
-import MyTutorCard from '@/components/myTutor/MyTutorCard';
+import MyTutorsTable from '@/components/myTutor/MyTutorsTable';
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@heroui/react';
 import { FiCalendar, FiSearch } from 'react-icons/fi';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+export const metadata = {
+  title: "My Tutors | MediQueue",
+  description: "Manage and view your booked tutors. Schedule sessions, view profiles, and track your learning progress.",
+};
 
 const MyTutorListPage = async () => {
     let tutors = [];
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
+    if (!session) {
+        redirect('/login');
+    }
+
     const { token } = await auth.api.getToken({
         headers: await headers()
     })
+    const userEmail = session?.user?.email;
+
     try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
         const res = await fetch(`${apiUrl}/my-tutors`, {
@@ -20,7 +36,10 @@ const MyTutorListPage = async () => {
             }
         });
         if (res.ok) {
-            tutors = await res.json();
+            const allData = await res.json();
+            tutors = allData.filter(
+                t => t.experience && t.description && (!t.userEmail || t.userEmail === userEmail)
+            );
         }
     } catch (error) {
         console.error("Error fetching booked tutors:", error);
@@ -42,11 +61,7 @@ const MyTutorListPage = async () => {
 
             {/* List or Empty State */}
             {hasTutors ? (
-                <div className="space-y-6">
-                    {tutors.map((tutor) => (
-                        <MyTutorCard key={tutor._id || tutor.id} tutor={tutor} />
-                    ))}
-                </div>
+                <MyTutorsTable tutors={tutors} />
             ) : (
                 /* Premium and Friendly Empty State Card */
                 <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-8 md:p-16 text-center max-w-2xl mx-auto shadow-sm mt-8">
