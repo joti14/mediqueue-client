@@ -11,17 +11,28 @@ import { PiInfoBold } from "react-icons/pi";
 const TutorDetailsPage = async ({ params }) => {
   const { id } = await params;
 
-  const session = await auth.api.getSession({
-    headers: await headers()
-  });
+  let session = null;
+  try {
+    session = await auth.api.getSession({
+      headers: await headers()
+    });
+  } catch (error) {
+    console.error("Error getting session:", error);
+  }
 
   if (!session) {
     redirect('/login');
   }
 
-  const { token } = await auth.api.getToken({
-    headers: await headers()
-  });
+  let token = null;
+  try {
+    const tokenRes = await auth.api.getToken({
+      headers: await headers()
+    });
+    token = tokenRes?.token;
+  } catch (error) {
+    console.error("Error getting token:", error);
+  }
 
   let tutor = null;
 
